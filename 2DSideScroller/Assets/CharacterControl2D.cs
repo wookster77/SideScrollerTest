@@ -4,36 +4,39 @@ using System.Collections;
 [RequireComponent (typeof (CharacterController))]
 [RequireComponent (typeof (Animator))]
 public class CharacterControl2D : MonoBehaviour {
-	CharacterController controller;
+	CharacterController characterController;
 	Animator animator;
-	Transform transform;
+	Transform characterTransform;
+	Camera mainCamera;
+	CameraState cameraState;
 
-	public float walkingSpeed = 0.1f;
+	public float walkingSpeed = 0.9f;
 
 	// Use this for initialization
 	void Start () {
-		controller = GetComponent<CharacterController>();
+		characterController = GetComponent<CharacterController>();
 		animator = GetComponent<Animator>();
-		transform = GetComponent<Transform> ();
+		characterTransform = GetComponent<Transform> ();
+		mainCamera = Camera.main;
 	}
 
 	CharacterDirection determineCharacterDirection ()
 	{
 		if (Input.GetKey (KeyCode.RightArrow)) {
 			if(Input.GetKey (KeyCode.UpArrow)) {
-				return CharacterDirection.UPRIGHT;
+				return CharacterDirection.UP_RIGHT;
 			} 
 			if (Input.GetKey (KeyCode.DownArrow)) {
-				return CharacterDirection.DOWNRIGHT;
+				return CharacterDirection.DOWN_RIGHT;
 			}
 			return CharacterDirection.RIGHT;
 		}
 		if (Input.GetKey (KeyCode.LeftArrow)) {
 			if(Input.GetKey (KeyCode.UpArrow)) {
-				return CharacterDirection.UPLEFT;
+				return CharacterDirection.UP_LEFT;
 			} 
 			if (Input.GetKey (KeyCode.DownArrow)) {
-				return CharacterDirection.DOWNLEFT;
+				return CharacterDirection.DOWN_LEFT;
 			}
 			return CharacterDirection.LEFT;
 		}
@@ -48,36 +51,44 @@ public class CharacterControl2D : MonoBehaviour {
 
 	}
 
+	void moveCameraAlongXAxis(float xAxisTransform) {
+//		var mainCameraTransform = mainCamera.characterTransform;
+//		Vector3 mainCamPosition = mainCameraTransform.localPosition;
+//
+//		mainCamPosition.x += xAxisTransform;
+	}
+
 	void moveCharacter (CharacterDirection characterDirection)
 	{
+
 		switch (characterDirection) {
 			case CharacterDirection.LEFT: 
-				controller.Move (new Vector3 (-walkingSpeed, 0));
+				characterController.Move (new Vector3 (-walkingSpeed, 0));
 				break;
-			case CharacterDirection.DOWNLEFT: 
-				controller.Move (new Vector3 (-walkingSpeed, 0));
+			case CharacterDirection.DOWN_LEFT: 
+				characterController.Move (new Vector3 (-walkingSpeed, 0));
 				break;
-			case CharacterDirection.UPLEFT: 
-				controller.Move (new Vector3 (-walkingSpeed, 0));
+			case CharacterDirection.UP_LEFT: 
+				characterController.Move (new Vector3 (-walkingSpeed, 0));
 				break;
 			case CharacterDirection.RIGHT: 
-				controller.Move (new Vector3 (walkingSpeed, 0));
+				characterController.Move (new Vector3 (walkingSpeed, 0));
 				break;
-			case CharacterDirection.DOWNRIGHT: 
-				controller.Move (new Vector3 (walkingSpeed, 0));
+			case CharacterDirection.DOWN_RIGHT: 
+				characterController.Move (new Vector3 (walkingSpeed, 0));
 				break;
-			case CharacterDirection.UPRIGHT: 
-				controller.Move (new Vector3 (walkingSpeed, 0));
+			case CharacterDirection.UP_RIGHT: 
+				characterController.Move (new Vector3 (walkingSpeed, 0));
 				break;
-			default: return;	
+			default: break;	
 		}
 
 	}
 
 	void scaleXAxisOfCharacter(float scaleOfX) {
-		Vector3 theScale = transform.localScale;
+		Vector3 theScale = characterTransform.localScale;
 		theScale.x = scaleOfX;
-		transform.localScale = theScale;
+		characterTransform.localScale = theScale;
 	}
 
 	void animateCharacter(CharacterAction action, CharacterDirection direction) {
@@ -88,39 +99,40 @@ public class CharacterControl2D : MonoBehaviour {
 		}
 
 		switch (direction) {
-		case CharacterDirection.LEFT: 
-			animator.Play ("Archer1_Walk 0");
-			scaleXAxisOfCharacter(-1.0f);
-			break;
-		case CharacterDirection.DOWNLEFT:
-			animator.Play ("Archer1_Walk 0");
-			scaleXAxisOfCharacter(-1.0f);
-			break;
-		case CharacterDirection.UPLEFT:
-			animator.Play ("Archer1_Jump");
-			scaleXAxisOfCharacter(-1.0f);
-			break;
-		case CharacterDirection.RIGHT:
-			animator.Play ("Archer1_Walk 0");
-			scaleXAxisOfCharacter(1.0f);
-			break;
-		case CharacterDirection.DOWNRIGHT:
-			animator.Play ("Archer1_Walk 0");
-			scaleXAxisOfCharacter(1.0f);
-			break;
-		case CharacterDirection.UPRIGHT:
-			animator.Play ("Archer1_Jump");
-			scaleXAxisOfCharacter(1.0f);
-			break;
-		case CharacterDirection.UP:
-			animator.Play ("Archer1_Jump");
-			break;
-		default: 
-			animator.Play ("Archer1_Idle");
+			case CharacterDirection.LEFT: 
+				animator.Play ("Archer1_Walk 0");
+				scaleXAxisOfCharacter(-1.0f);
+				break;
+			case CharacterDirection.DOWN_LEFT:
+				animator.Play ("Archer1_Walk 0");
+				scaleXAxisOfCharacter(-1.0f);
+				break;
+			case CharacterDirection.UP_LEFT:
+				animator.Play ("Archer1_Jump");
+				scaleXAxisOfCharacter(-1.0f);
+				break;
+			case CharacterDirection.RIGHT:
+				animator.Play ("Archer1_Walk 0");
+				scaleXAxisOfCharacter(1.0f);
+				break;
+			case CharacterDirection.DOWN_RIGHT:
+				animator.Play ("Archer1_Walk 0");
+				scaleXAxisOfCharacter(1.0f);
+				break;
+			case CharacterDirection.UP_RIGHT:
+				animator.Play ("Archer1_Jump");
+				scaleXAxisOfCharacter(1.0f);
+				break;
+			case CharacterDirection.UP:
+				animator.Play ("Archer1_Jump");
+				break;
+			default: 
+				animator.Play ("Archer1_Idle");
 			return;
 		}
 		
 	}
+
 
 	// Update is called once per frame
 	void Update () {
@@ -143,10 +155,10 @@ public class CharacterControl2D : MonoBehaviour {
 		DOWN,
 		LEFT,
 		RIGHT,
-		UPLEFT,
-		UPRIGHT,
-		DOWNLEFT,
-		DOWNRIGHT,
+		UP_LEFT,
+		UP_RIGHT,
+		DOWN_LEFT,
+		DOWN_RIGHT,
 		IDLE
 	}
 	
