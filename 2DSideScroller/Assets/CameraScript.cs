@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof (CharacterControl2D))]
 public class CameraScript : MonoBehaviour {
 
-    CharacterControl2D characterController;
+	public CharacterControl2D characterController;
 	Transform characterTransform;
 	Camera mainCamera;
 	CameraState cameraState;
@@ -13,11 +12,9 @@ public class CameraScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		characterController = GetComponent<CharacterControl2D> ();
 		walkingSpeed = characterController.walkingSpeed;
 		mainCamera = Camera.main;
 		cameraState = CameraState.CENTRED;
-		Debug.Log (walkingSpeed);
 	}
 	
 	// Update is called once per frame
