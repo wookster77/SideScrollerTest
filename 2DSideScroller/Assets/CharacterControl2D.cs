@@ -10,7 +10,7 @@ public class CharacterControl2D : MonoBehaviour {
 	Camera mainCamera;
 	CameraState cameraState;
 
-	public float walkingSpeed = 0.1f;
+	public float walkingSpeed = 0.9f;
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +18,6 @@ public class CharacterControl2D : MonoBehaviour {
 		animator = GetComponent<Animator>();
 		characterTransform = GetComponent<Transform> ();
 		mainCamera = Camera.main;
-		cameraState = CameraState.CENTRED;
 	}
 
 	CharacterDirection determineCharacterDirection ()
@@ -134,44 +133,6 @@ public class CharacterControl2D : MonoBehaviour {
 		
 	}
 
-	void updateCamera ()
-	{
-		float boundaryLengthInPixels = 150.0f;
-
-		Vector3 characterPosition = characterController.transform.localPosition;
-		float characterXPositionInPixels = mainCamera.WorldToScreenPoint(characterPosition).x;
-
-		Transform mainCameraTransform = mainCamera.transform;
-		Vector3 mainCameraPosition = mainCameraTransform.localPosition;
-		float cameraXPositionInPixels = mainCamera.WorldToScreenPoint(mainCameraPosition).x;
-		float xAxisPixelWidth = mainCamera.pixelWidth;
-
-		float rightBoundary = cameraXPositionInPixels + (xAxisPixelWidth/2) - boundaryLengthInPixels;
-		float leftBoundary = cameraXPositionInPixels - (xAxisPixelWidth/2) + boundaryLengthInPixels;
-
-		if (characterXPositionInPixels >= rightBoundary) {
-			cameraState = CameraState.RESOLVING_TO_CHARACTER_FROM_RIGHT;
-		} else if (characterXPositionInPixels <= leftBoundary) {
-			cameraState = CameraState.RESOLVING_TO_CHARACTER_FROM_LEFT;
-		} else {
-			cameraState = CameraState.CENTRED;
-		}
-
-		Vector3 mainCamPosition = mainCameraTransform.localPosition;
-		switch (cameraState) {
-			case CameraState.RESOLVING_TO_CHARACTER_FROM_RIGHT:
-				mainCamPosition.x += walkingSpeed;
-				break;
-			case CameraState.RESOLVING_TO_CHARACTER_FROM_LEFT:
-				mainCamPosition.x -= walkingSpeed;
-				break;
-			case CameraState.CENTRED:
-				break;
-		}
-		mainCameraTransform.localPosition = mainCamPosition;
-
-
-	}
 
 	// Update is called once per frame
 	void Update () {
@@ -186,7 +147,6 @@ public class CharacterControl2D : MonoBehaviour {
 
 		animateCharacter (characterAction, characterDirection);
 		moveCharacter (characterDirection);
-		updateCamera ();
 	}
 
 	enum CharacterDirection
@@ -206,12 +166,6 @@ public class CharacterControl2D : MonoBehaviour {
 	{
 		ATTACK,
 		NONE
-	}
-
-	enum CameraState {
-		CENTRED,
-		RESOLVING_TO_CHARACTER_FROM_RIGHT,
-		RESOLVING_TO_CHARACTER_FROM_LEFT
 	}
 
 }
