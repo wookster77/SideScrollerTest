@@ -12,7 +12,12 @@ public class CharacterControl2D : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		CharacterController controller = GetComponent<CharacterController>();
-		controller.Move(new Vector3(1,0));
+
+		if (Input.GetKey(KeyCode.RightArrow)) {
+			controller.Move (new Vector3 (1, 0));
+		} else if (Input.GetKey(KeyCode.LeftArrow)) {
+			controller.Move (new Vector3 (-1, 0));
+		}
 
 	}
 }
