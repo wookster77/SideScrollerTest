@@ -2,22 +2,144 @@
 using System.Collections;
 
 [RequireComponent (typeof (CharacterController))]
+[RequireComponent (typeof (Animator))]
 public class CharacterControl2D : MonoBehaviour {
+	CharacterController controller;
+	Animator animator;
+
+	public float walkingSpeed = 0.1f;
 
 	// Use this for initialization
 	void Start () {
-	
+		controller = GetComponent<CharacterController>();
+		animator = GetComponent<Animator>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		CharacterController controller = GetComponent<CharacterController>();
 
-		if (Input.GetKey(KeyCode.RightArrow)) {
-			controller.Move (new Vector3 (1, 0));
-		} else if (Input.GetKey(KeyCode.LeftArrow)) {
-			controller.Move (new Vector3 (-1, 0));
+	CharacterDirection determineCharacterDirection ()
+	{
+		if (Input.GetKey (KeyCode.RightArrow)) {
+			if(Input.GetKey (KeyCode.UpArrow)) {
+				return CharacterDirection.UPRIGHT;
+			} 
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				return CharacterDirection.DOWNRIGHT;
+			}
+			return CharacterDirection.RIGHT;
+		}
+		if (Input.GetKey (KeyCode.LeftArrow)) {
+			if(Input.GetKey (KeyCode.UpArrow)) {
+				return CharacterDirection.UPLEFT;
+			} 
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				return CharacterDirection.DOWNLEFT;
+			}
+			return CharacterDirection.LEFT;
+		}
+
+		if(Input.GetKey (KeyCode.UpArrow)) {
+			return CharacterDirection.UP;
+		} 
+		if (Input.GetKey (KeyCode.DownArrow)) {
+			return CharacterDirection.DOWN;
+		}
+		return CharacterDirection.IDLE;
+
+	}
+
+	void moveCharacter (CharacterDirection characterDirection)
+	{
+		switch (characterDirection) {
+			case CharacterDirection.LEFT: 
+				controller.Move (new Vector3 (-walkingSpeed, 0));
+				break;
+			case CharacterDirection.DOWNLEFT: 
+				controller.Move (new Vector3 (-walkingSpeed, 0));
+				break;
+			case CharacterDirection.UPLEFT: 
+				controller.Move (new Vector3 (-walkingSpeed, 0));
+				break;
+			case CharacterDirection.RIGHT: 
+				controller.Move (new Vector3 (walkingSpeed, 0));
+				break;
+			case CharacterDirection.DOWNRIGHT: 
+				controller.Move (new Vector3 (walkingSpeed, 0));
+				break;
+			case CharacterDirection.UPRIGHT: 
+				controller.Move (new Vector3 (walkingSpeed, 0));
+				break;
+			default: return;	
 		}
 
 	}
+
+	void animateCharacter(CharacterAction action, CharacterDirection direction) {
+		
+		if (action == CharacterAction.ATTACK) {
+			animator.Play ("Archer1_Attack2");
+			return;
+		}
+		
+		switch (direction) {
+		case CharacterDirection.LEFT: 
+			animator.Play ("Archer1_Walk 0");
+			break;
+		case CharacterDirection.DOWNLEFT:
+			animator.Play ("Archer1_Walk 0");
+			break;
+		case CharacterDirection.UPLEFT:
+			animator.Play ("Archer1_Jump");
+			break;
+		case CharacterDirection.RIGHT:
+			animator.Play ("Archer1_Walk 0");
+			break;
+		case CharacterDirection.DOWNRIGHT:
+			animator.Play ("Archer1_Walk 0");
+			break;
+		case CharacterDirection.UPRIGHT:
+			animator.Play ("Archer1_Jump");
+			break;
+		case CharacterDirection.UP:
+			animator.Play ("Archer1_Jump");
+			break;
+		default: 
+			animator.Play ("Archer1_Idle");
+			return;
+		}
+		
+	}
+
+	// Update is called once per frame
+	void Update () {
+		CharacterAction characterAction = CharacterAction.NONE;
+
+		if (Input.GetKey (KeyCode.Space)) 
+		{
+			characterAction = CharacterAction.ATTACK;
+		}
+
+		CharacterDirection characterDirection = determineCharacterDirection ();
+
+		animateCharacter (characterAction, characterDirection);
+		moveCharacter (characterDirection);
+	}
+
+	enum CharacterDirection
+	{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+		UPLEFT,
+		UPRIGHT,
+		DOWNLEFT,
+		DOWNRIGHT,
+		IDLE
+	}
+	
+	enum CharacterAction
+	{
+		ATTACK,
+		NONE
+	}
+
 }
