@@ -6,6 +6,7 @@ using System.Collections;
 public class CharacterControl2D : MonoBehaviour {
 	CharacterController controller;
 	Animator animator;
+	Transform transform;
 
 	public float walkingSpeed = 0.1f;
 
@@ -13,6 +14,7 @@ public class CharacterControl2D : MonoBehaviour {
 	void Start () {
 		controller = GetComponent<CharacterController>();
 		animator = GetComponent<Animator>();
+		transform = GetComponent<Transform> ();
 	}
 
 	CharacterDirection determineCharacterDirection ()
@@ -72,31 +74,43 @@ public class CharacterControl2D : MonoBehaviour {
 
 	}
 
+	void scaleXAxisOfCharacter(float scaleOfX) {
+		Vector3 theScale = transform.localScale;
+		theScale.x = scaleOfX;
+		transform.localScale = theScale;
+	}
+
 	void animateCharacter(CharacterAction action, CharacterDirection direction) {
-		
+
 		if (action == CharacterAction.ATTACK) {
 			animator.Play ("Archer1_Attack2");
 			return;
 		}
-		
+
 		switch (direction) {
 		case CharacterDirection.LEFT: 
 			animator.Play ("Archer1_Walk 0");
+			scaleXAxisOfCharacter(-1.0f);
 			break;
 		case CharacterDirection.DOWNLEFT:
 			animator.Play ("Archer1_Walk 0");
+			scaleXAxisOfCharacter(-1.0f);
 			break;
 		case CharacterDirection.UPLEFT:
 			animator.Play ("Archer1_Jump");
+			scaleXAxisOfCharacter(-1.0f);
 			break;
 		case CharacterDirection.RIGHT:
 			animator.Play ("Archer1_Walk 0");
+			scaleXAxisOfCharacter(1.0f);
 			break;
 		case CharacterDirection.DOWNRIGHT:
 			animator.Play ("Archer1_Walk 0");
+			scaleXAxisOfCharacter(1.0f);
 			break;
 		case CharacterDirection.UPRIGHT:
 			animator.Play ("Archer1_Jump");
+			scaleXAxisOfCharacter(1.0f);
 			break;
 		case CharacterDirection.UP:
 			animator.Play ("Archer1_Jump");
