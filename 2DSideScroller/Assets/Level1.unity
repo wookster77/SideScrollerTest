@@ -167,7 +167,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 401706627}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 533b2ac5f31c22143899fb7a956cc460, type: 3}
+  m_Script: {fileID: 11500000, guid: b625f4b92bb2c440bb8cc9d0b17a9a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 1229236307}
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4831fdba0ae52440abb45811646e7b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingSpeed: 2
+  walkingSpeed: .200000003
 --- !u!143 &1229236308
 CharacterController:
   m_ObjectHideFlags: 0
