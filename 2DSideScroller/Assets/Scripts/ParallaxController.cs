@@ -6,7 +6,6 @@ public class ParallaxController : MonoBehaviour {
 	Transform backgroundTransform;
 	Camera mainCamera;
 	Vector3 cameraPreviousPosition;
-	Vector3 cameraCurrentPosition;
 	public float cameraFollowPercentage = 100.0f;
 	Vector3 cameraVelocity;
 	// Use this for initialization
@@ -26,7 +25,7 @@ public class ParallaxController : MonoBehaviour {
 
 	Vector3 GetCameraVelocity()
 	{
-		cameraCurrentPosition = mainCamera.transform.position;
+		Vector3 cameraCurrentPosition = mainCamera.transform.position;
 		cameraVelocity = cameraCurrentPosition - cameraPreviousPosition;
 		cameraPreviousPosition = cameraCurrentPosition;
 		return cameraVelocity;
