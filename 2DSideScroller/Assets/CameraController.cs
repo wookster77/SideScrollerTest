@@ -61,6 +61,8 @@ public class CameraController : MonoBehaviour {
 		Vector3 leftBoundary = Camera.main.ViewportToWorldPoint(new Vector3(0.2f,0,0));
 		cameraStateCurrent = determineStateOfCamera (mainCameraTransform, characterPosition, leftBoundary.x, rightBoundary.x);
 
+		float distanceThatCameraNeedsToMove = Camera.main.ViewportToWorldPoint (new Vector3 (0.5f, 0, 0)).x - Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, 0)).x;
+
 		cameraStatePrevious = cameraStateCurrent;
 		characterPositionXPrevious = characterPosition.x;
 
@@ -69,11 +71,11 @@ public class CameraController : MonoBehaviour {
 
 		switch (cameraStateCurrent) {
 		case CameraState.RESOLVING_TO_CHARACTER_FROM_RIGHT:
-			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition + new Vector3(15,0,0), cameraSmoothnessCoefficient * Time.deltaTime); 
+			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition + new Vector3(distanceThatCameraNeedsToMove,0,0), cameraSmoothnessCoefficient * Time.deltaTime); 
 			mainCamPosition.x = smoothMovementTowardsCharacter.x;
 			break;
 		case CameraState.RESOLVING_TO_CHARACTER_FROM_LEFT:
-			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition - new Vector3(15,0,0), cameraSmoothnessCoefficient * Time.deltaTime); 
+			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition - new Vector3(distanceThatCameraNeedsToMove,0,0), cameraSmoothnessCoefficient * Time.deltaTime); 
 			mainCamPosition.x = smoothMovementTowardsCharacter.x;
 			break;
 		case CameraState.CENTRED:
