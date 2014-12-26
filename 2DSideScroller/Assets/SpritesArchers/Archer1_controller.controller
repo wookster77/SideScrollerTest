@@ -259,7 +259,7 @@ State:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Archer1_Walk 0
-  m_Speed: 1
+  m_Speed: 1.5
   m_CycleOffset: 0
   m_Motions:
   - {fileID: 7400000, guid: 83263709c4359284ebbcc086d73445f0, type: 2}
@@ -305,9 +305,9 @@ StateMachine:
   m_ChildStateMachinePosition: []
   m_OrderedTransitions:
     data:
-      first: {fileID: 110206170}
+      first: {fileID: 110291778}
       second:
-      - {fileID: 110100000}
+      - {fileID: 110123614}
     data:
       first: {fileID: 110200000}
       second:
@@ -325,13 +325,13 @@ StateMachine:
       second:
       - {fileID: 110149980}
     data:
-      first: {fileID: 110291778}
-      second:
-      - {fileID: 110123614}
-    data:
       first: {fileID: 110230138}
       second:
       - {fileID: 110187537}
+    data:
+      first: {fileID: 110206170}
+      second:
+      - {fileID: 110100000}
     data:
       first: {fileID: 110280530}
       second:
