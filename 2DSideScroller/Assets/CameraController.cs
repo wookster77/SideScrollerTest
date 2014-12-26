@@ -9,19 +9,19 @@ public class CameraController : MonoBehaviour {
 	Camera mainCamera;
 	CameraState cameraStateCurrent;
 	CameraState cameraStatePrevious;
-	Vector3 characterPositionPrevious;
 	
 	void Start () {
 		mainCamera = Camera.main;
 		cameraStateCurrent = CameraState.CENTRED;
 		cameraStatePrevious = CameraState.CENTRED;
-		characterPositionPrevious = characterController.transform.localPosition;
 	}
 
-	CameraState determineStateOfCamera (Transform mainCameraTransform, float characterXVelocity, float boundaryLengthInPixels)
+	CameraState determineStateOfCamera (Transform mainCameraTransform, Vector3 characterPosition, float boundaryLengthInPixels)
 	{
 
-		if (characterXVelocity.Equals (0)) {
+		Vector3 mainCameraPosition = mainCameraTransform.position;
+
+		if (characterPosition.x.Equals (mainCameraPosition.x)) {
 			return CameraState.CENTRED;
 		}
 
@@ -40,15 +40,14 @@ public class CameraController : MonoBehaviour {
 				}
 		}
 
-		float characterXPositionInPixels = mainCamera.WorldToScreenPoint (characterController.transform.localPosition).x;
-		Vector3 mainCameraPosition = mainCameraTransform.localPosition;
-		float cameraXPositionInPixels = mainCamera.WorldToScreenPoint (mainCameraPosition).x;
-		float xAxisPixelWidth = mainCamera.pixelWidth;
-		float rightBoundary = cameraXPositionInPixels + (xAxisPixelWidth / 2) - lengthOfXAxisBoundaryInPixels;
-		float leftBoundary = cameraXPositionInPixels - (xAxisPixelWidth / 2) + lengthOfXAxisBoundaryInPixels;
-		if (characterXPositionInPixels >= rightBoundary) {
+
+		float characterPositionX = characterPosition.x;
+		float rightBoundary = Camera.main.ViewportToWorldPoint(new Vector3(0.8f,0,0)).x;
+		float leftBoundary = Camera.main.ViewportToWorldPoint(new Vector3(0.2f,0,0)).x;
+
+		if (characterPositionX >= rightBoundary) {
 			return CameraState.RESOLVING_TO_CHARACTER_FROM_RIGHT;
-		} else if (characterXPositionInPixels <= leftBoundary) {
+		} else if (characterPositionX <= leftBoundary) {
 			return CameraState.RESOLVING_TO_CHARACTER_FROM_LEFT;
 		} else {
 			return CameraState.CENTRED;
@@ -58,28 +57,24 @@ public class CameraController : MonoBehaviour {
 	void Update () {
 		Transform mainCameraTransform = mainCamera.transform;
 		Vector3 characterPosition = characterController.transform.localPosition;
-		float characterXVelocity = characterPosition.x - characterPositionPrevious.x;
-		characterPositionPrevious = characterPosition;
 
-		cameraStateCurrent = determineStateOfCamera (mainCameraTransform, characterXVelocity, lengthOfXAxisBoundaryInPixels);
+		cameraStateCurrent = determineStateOfCamera (mainCameraTransform, characterPosition, lengthOfXAxisBoundaryInPixels);
 
-		Debug.Log ("Current State: " + cameraStateCurrent);
 		cameraStatePrevious = cameraStateCurrent;
 
 		Vector3 mainCamPosition = mainCameraTransform.localPosition;
+		Vector3 smoothMovementTowardsCharacter;
 
 		switch (cameraStateCurrent) {
 		case CameraState.RESOLVING_TO_CHARACTER_FROM_RIGHT:
-			mainCamPosition.x += characterXVelocity;
+			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition, 1.5f * Time.deltaTime); 
+			mainCamPosition.x = smoothMovementTowardsCharacter.x;
 			break;
 		case CameraState.RESOLVING_TO_CHARACTER_FROM_LEFT:
-			mainCamPosition.x += characterXVelocity;
+			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition, 1.5f * Time.deltaTime); 
+			mainCamPosition.x = smoothMovementTowardsCharacter.x;
 			break;
 		case CameraState.CENTRED:
-			Debug.Log ("Main camera position x: " + mainCamPosition.x);
-			Debug.Log ("Character position x: " + characterPosition.x);
-			Vector3 smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition, 1.5f * Time.deltaTime); 
-			mainCamPosition.x = smoothMovementTowardsCharacter.x;
 			break;
 		}
 		mainCameraTransform.localPosition = mainCamPosition;

@@ -51,13 +51,6 @@ public class CharacterControl2D : MonoBehaviour {
 
 	}
 
-	void moveCameraAlongXAxis(float xAxisTransform) {
-//		var mainCameraTransform = mainCamera.characterTransform;
-//		Vector3 mainCamPosition = mainCameraTransform.localPosition;
-//
-//		mainCamPosition.x += xAxisTransform;
-	}
-
 	void moveCharacter (CharacterDirection characterDirection)
 	{
 
