@@ -68,7 +68,6 @@ public class CameraController : MonoBehaviour {
 
 		Vector3 mainCamPosition = mainCameraTransform.localPosition;
 
-		Debug.Log ("character x velocity: " + characterXVelocity);
 		switch (cameraStateCurrent) {
 		case CameraState.RESOLVING_TO_CHARACTER_FROM_RIGHT:
 			mainCamPosition.x += characterXVelocity;
@@ -77,6 +76,10 @@ public class CameraController : MonoBehaviour {
 			mainCamPosition.x += characterXVelocity;
 			break;
 		case CameraState.CENTRED:
+			Debug.Log ("Main camera position x: " + mainCamPosition.x);
+			Debug.Log ("Character position x: " + characterPosition.x);
+			Vector3 smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition, 1.5f * Time.deltaTime); 
+			mainCamPosition.x = smoothMovementTowardsCharacter.x;
 			break;
 		}
 		mainCameraTransform.localPosition = mainCamPosition;
