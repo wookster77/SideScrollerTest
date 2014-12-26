@@ -69,11 +69,11 @@ public class CameraController : MonoBehaviour {
 
 		switch (cameraStateCurrent) {
 		case CameraState.RESOLVING_TO_CHARACTER_FROM_RIGHT:
-			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition + new Vector3(18,0,0), cameraSmoothnessCoefficient * Time.deltaTime); 
+			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition + new Vector3(15,0,0), cameraSmoothnessCoefficient * Time.deltaTime); 
 			mainCamPosition.x = smoothMovementTowardsCharacter.x;
 			break;
 		case CameraState.RESOLVING_TO_CHARACTER_FROM_LEFT:
-			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition - new Vector3(18,0,0), cameraSmoothnessCoefficient * Time.deltaTime); 
+			smoothMovementTowardsCharacter = Vector3.Lerp (mainCamPosition, characterPosition - new Vector3(15,0,0), cameraSmoothnessCoefficient * Time.deltaTime); 
 			mainCamPosition.x = smoothMovementTowardsCharacter.x;
 			break;
 		case CameraState.CENTRED:
