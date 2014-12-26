@@ -170,7 +170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b625f4b92bb2c440bb8cc9d0b17a9a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 1229236307}
+  characterController: {fileID: 1229236308}
+  lengthOfXAxisBoundaryInPixels: 150
 --- !u!1 &1229236303
 GameObject:
   m_ObjectHideFlags: 0
