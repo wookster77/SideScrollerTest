@@ -22,8 +22,6 @@ public class CameraController : MonoBehaviour {
 
 	CameraState DetermineCameraState (Transform mainCameraTransform, Vector3 characterPosition, float leftBoundaryX, float rightBoundaryX) {
 
-		Vector3 mainCameraPosition = mainCameraTransform.position;
-
 		if (characterPosition.x.Equals (characterPositionXPrevious)) {
 			return CameraState.CENTRED;
 		}
