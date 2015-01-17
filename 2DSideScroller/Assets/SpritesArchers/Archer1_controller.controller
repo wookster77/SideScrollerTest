@@ -7,7 +7,13 @@ AnimatorController:
   m_PrefabInternal: {fileID: 0}
   m_Name: Archer1_controller
   serializedVersion: 2
-  m_AnimatorParameters: []
+  m_AnimatorParameters:
+  - m_Name: CHARACTER_STATE
+    m_Type: 3
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 3
     m_Name: Base Layer
@@ -95,7 +101,11 @@ Transition:
   m_DstState: {fileID: 110266046}
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 6
+    m_ConditionEvent: CHARACTER_STATE
+    m_EventTreshold: 0
+    m_ExitTime: 0
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -204,7 +214,7 @@ State:
   m_Motions:
   - {fileID: 7400000, guid: 9fe548dca22107f4a842b07f6df0b73a, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
-  m_Position: {x: 85, y: 115, z: 0}
+  m_Position: {x: 84, y: 120, z: 0}
   m_IKOnFeet: 0
   m_Mirror: 0
   m_Tag: 
@@ -320,6 +330,9 @@ StateMachine:
       first: {fileID: 110273416}
       second:
       - {fileID: 110134006}
+    data:
+      first: {fileID: 110279367}
+      second: []
     data:
       first: {fileID: 110269903}
       second:

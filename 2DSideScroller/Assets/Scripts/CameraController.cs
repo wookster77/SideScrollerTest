@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using TouchScript.Gestures;
 
 public class CameraController : MonoBehaviour {
 
@@ -13,6 +14,7 @@ public class CameraController : MonoBehaviour {
 	Vector3 distanceThatCameraNeedsToMove;
 	
 	void Start () {
+
 		mainCamera = Camera.main;
 		cameraStateCurrent = CameraState.CENTRED;
 		cameraStatePrevious = CameraState.CENTRED;

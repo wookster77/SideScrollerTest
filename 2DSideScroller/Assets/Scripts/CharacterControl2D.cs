@@ -1,52 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
+using TouchScript.Gestures;
 
 [RequireComponent (typeof (CharacterController))]
 [RequireComponent (typeof (Animator))]
 public class CharacterControl2D : MonoBehaviour {
+	public InputDetector inputDetector;
 	CharacterController characterController;
 	Animator animator;
 	Transform characterTransform;
-
+	CharacterDirection characterDirection;
 	public float walkingSpeed = 0.9f;
+
+	InputEventType lastInputEvent = InputEventType.OFF;
+
 
 	void Start () {
 		characterController = GetComponent<CharacterController>();
 		animator = GetComponent<Animator>();
 		characterTransform = GetComponent<Transform> ();
+		characterDirection = CharacterDirection.IDLE;
+
+		inputDetector.InputEvent += OnInputEvent;
 	}
 
-	CharacterDirection DetermineCharacterDirection ()
+	void OnInputEvent (InputEventType eventType)
 	{
-		if (Input.GetKey (KeyCode.RightArrow)) {
-			if(Input.GetKey (KeyCode.UpArrow)) {
-				return CharacterDirection.UP_RIGHT;
-			} 
-			if (Input.GetKey (KeyCode.DownArrow)) {
-				return CharacterDirection.DOWN_RIGHT;
-			}
-			return CharacterDirection.RIGHT;
-		}
-		if (Input.GetKey (KeyCode.LeftArrow)) {
-			if(Input.GetKey (KeyCode.UpArrow)) {
-				return CharacterDirection.UP_LEFT;
-			} 
-			if (Input.GetKey (KeyCode.DownArrow)) {
-				return CharacterDirection.DOWN_LEFT;
-			}
-			return CharacterDirection.LEFT;
-		}
-
-		if(Input.GetKey (KeyCode.UpArrow)) {
-			return CharacterDirection.UP;
-		} 
-		if (Input.GetKey (KeyCode.DownArrow)) {
-			return CharacterDirection.DOWN;
-		}
-		return CharacterDirection.IDLE;
-
+		this.lastInputEvent = eventType;
 	}
-
+	
 	void MoveCharacter (CharacterDirection characterDirection)
 	{
 
@@ -90,6 +72,7 @@ public class CharacterControl2D : MonoBehaviour {
 		switch (direction) {
 			case CharacterDirection.LEFT: 
 				animator.Play ("Archer1_Walk 0");
+			animator.SetInteger("CHARACTER_STATE",0);
 				ScaleXAxisOfCharacter(-1.0f);
 				break;
 			case CharacterDirection.DOWN_LEFT:
@@ -130,7 +113,42 @@ public class CharacterControl2D : MonoBehaviour {
 			characterAction = CharacterAction.ATTACK;
 		}
 
-		CharacterDirection characterDirection = DetermineCharacterDirection ();
+		switch (this.characterDirection) {
+		
+		case CharacterDirection.IDLE:
+			if(this.lastInputEvent.Equals(InputEventType.LEFT)) {
+				this.characterDirection = CharacterDirection.LEFT;
+				break;
+			}
+			if(this.lastInputEvent.Equals(InputEventType.RIGHT)) {
+				this.characterDirection = CharacterDirection.RIGHT;
+				break;
+			}
+			break;
+		
+		case CharacterDirection.LEFT: 
+			if(this.lastInputEvent.Equals(InputEventType.OFF)) {
+				this.characterDirection = CharacterDirection.IDLE;
+				break;
+			}
+			if(this.lastInputEvent.Equals(InputEventType.RIGHT)) {
+				this.characterDirection = CharacterDirection.RIGHT;
+				break;
+			}
+			break;
+				
+		case CharacterDirection.RIGHT:
+			if(this.lastInputEvent.Equals(InputEventType.LEFT)) {
+				this.characterDirection = CharacterDirection.LEFT;
+				break;
+			}
+			if(this.lastInputEvent.Equals(InputEventType.OFF)) {
+				this.characterDirection = CharacterDirection.IDLE;
+				break;
+			}
+			break;
+			default: throw new UnityException("Character Direction state: " + this.characterDirection + " has not been accounted for.");
+		}
 
 		AnimateCharacter (characterAction, characterDirection);
 		MoveCharacter (characterDirection);
